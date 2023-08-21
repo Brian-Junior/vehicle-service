@@ -2,4 +2,12 @@ spring:
   datasource:
     username: vehicle_service
     password: vehicle_service
-    url: jbdc:mysql://localhost:3306/vehicle_service
+    url: jdbc:mysql://localhost:3306/vehicle_service
+    
+  jpa:
+    hibernate:
+       ddl-auto: update
+    show-sql: true
+    
+     
+  
