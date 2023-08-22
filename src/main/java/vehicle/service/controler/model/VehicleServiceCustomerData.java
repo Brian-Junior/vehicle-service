@@ -6,10 +6,6 @@ import java.util.Set;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pet.store.controller.model.PetStoreData;
-import pet.store.controller.model.PetStoreData.PetStoreCustomer;
-import pet.store.controller.model.PetStoreData.PetStoreEmployee;
-import pet.store.entity.Employee;
 import vehicle.service.entity.Customer;
 import vehicle.service.entity.Service;
 import vehicle.service.entity.Vehicle;
@@ -34,10 +30,10 @@ public class VehicleServiceCustomerData {
 			customerEmail = customer.getCustomerEmail();
 			
 			for(Vehicle vehicle : customer.getVehicles() ) {
-				vehicle.add(new CustomerVehicle(Vehicle));
+				vehicle.add(new CustomerVehicle(vehicle));
 			}
-			for (Service service : customer.getService() ) {
-				service.add( new CustomerService(Service));
+			for (Service service : customer.getServices() ) {
+				service.add( new CustomerService(service));
 			}
 		}
 		@Data

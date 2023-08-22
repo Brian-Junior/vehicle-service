@@ -39,4 +39,6 @@ public class Customer {
 	@ToString.Exclude
 	
 	private Set<Vehicle> vehicles = new HashSet<>();
+	
+	private Set<Service> services = new HashSet<>();
 }
