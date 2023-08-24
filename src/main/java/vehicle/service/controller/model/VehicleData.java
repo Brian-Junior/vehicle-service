@@ -1,4 +1,4 @@
-package vehicle.service.controler.model;
+package vehicle.service.controller.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -6,7 +6,7 @@ import vehicle.service.entity.Vehicle;
 
 @Data
 @NoArgsConstructor
-public class VehicleServiceVehicle {
+public class VehicleData {
 	
 	private Long vehicleId;
 	private String vehicleYear;
@@ -15,7 +15,7 @@ public class VehicleServiceVehicle {
 	private String vehicleColor;
 	
 	
-	public VehicleServiceVehicle (Vehicle vehicle) {
+	public VehicleData (Vehicle vehicle) {
 		vehicleId = vehicle.getVehicleId();
 		vehicleYear = vehicle.getVehicleYear();
 		vehicleMake = vehicle.getVehicleMake();
