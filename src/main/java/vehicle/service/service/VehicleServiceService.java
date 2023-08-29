@@ -127,15 +127,15 @@ public List<CustomerData> retrieveAllCustomers(){
 }
 
 @Transactional(readOnly = false)
-public ServiceData saveService(Long customerId, ServiceData serviceData) {
+public ServiceData saveService(Long vehicleId, ServiceData serviceData) {
 
 
 	 Customer customer = findCustomerById(customerId);
 	 Long serviceId = serviceData.getServiceId();
-	 Service service = findOrCreateService(customerId, serviceId);
+	 Service service = findOrCreateService(vehicleId, serviceId);
 	 
 	 copyServiceFields(service, serviceData);
-	 service.getCustomers().add(customer);
+	 service.getvehicles().add(vehicle);
 	customer.getServices().add(service);
 	 return new ServiceData(serviceDao.save(service));
 	  	
@@ -151,7 +151,7 @@ private Customer findOrCreateService(Long customerId, Long serviceId) {
 	if (Objects.isNull(serviceId)){
 		return new Service();
 	} else {
-		return findServiceById(customerId,serviceId);
+		return findServiceById(customerId, serviceId);
 	}
 }
 	
