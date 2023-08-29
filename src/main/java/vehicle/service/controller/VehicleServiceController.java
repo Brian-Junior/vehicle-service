@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 import vehicle.service.controller.model.CustomerData;
-import vehicle.service.controller.model.ServiceData;
+import vehicle.service.controller.model.RepairData;
 import vehicle.service.controller.model.VehicleData;
 import vehicle.service.service.VehicleServiceService;
 
@@ -53,11 +53,11 @@ public class VehicleServiceController {
 		return vehicleServiceService.retrieveAllCustomers();
 	}
 	
-	@PostMapping("/{customerId}/service")
+	@PostMapping("/{vehicleId}/repair")
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public ServiceData saveService(@PathVariable Long customerId, @RequestBody ServiceData serviceData) {
-		log.info("Creating service {}", serviceData);
-		return vehicleServiceService.saveService(customerId, serviceData);
+	public RepairData saveRepair(@PathVariable Long vehicleId, @RequestBody RepairData repairData) {
+		log.info("Creating repair {}", repairData);
+		return vehicleServiceService.saveRepair(vehicleId, repairData);
 	}
 	@GetMapping("/{customerId}")
 	public CustomerData retrieveCustomerById(@PathVariable Long customerId) {
@@ -70,5 +70,23 @@ public class VehicleServiceController {
 		vehicleServiceService.deleteCustomerById(customerId);
 		
 		return Map.of("message", "Customer with ID=" + customerId + "was deleted successfully");
+	}
+	@PutMapping("/{vehicleId}")
+	public VehicleData updatevehicleData(@PathVariable Long vehicleId, @RequestBody VehicleData vehicleData) {
+		vehicleData.setVehicleId(vehicleId);
+		log.info("Updating vehicle{}", vehicleData);
+		return vehicleServiceService.saveVehicle(vehicleId, vehicleData);
+	}
+	@GetMapping("/{vehicleId}")
+	public VehicleData retrieveVehicleById(@PathVariable Long vehicleId) {
+		log.info("Retriving vehicle with ID={}", vehicleId);
+		return vehicleServiceService.retrieveVehicleById(vehicleId);
+	}
+	@DeleteMapping("/{vehicleId}")
+	public Map<String, String> deleteVehicleById(@PathVariable Long vehicleId ){
+		log.info("Deleting vehicle with id=" + vehicleId + ".");
+		vehicleServiceService.deleteVehicleById(vehicleId);
+		
+		return Map.of("message", "Vehicle with ID=" + vehicleId + "was deleted successfully");
 	}
 }

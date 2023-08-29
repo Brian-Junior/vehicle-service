@@ -15,18 +15,18 @@ import lombok.ToString;
 
 @Entity
 @Data
-public class Service {
+public class Repair {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long serviceId;
+	private Long repairId;
 	
 	@EqualsAndHashCode.Exclude
 	
-	private String serviceType;
+	private String repairType;
 	
 	@EqualsAndHashCode.Exclude
 	
-	private BigDecimal serviceCost;
+	private BigDecimal repairCost;
 	
 	
 	@EqualsAndHashCode.Exclude

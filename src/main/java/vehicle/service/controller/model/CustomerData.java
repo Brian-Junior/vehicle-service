@@ -6,7 +6,7 @@ import java.util.Set;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import vehicle.service.entity.Customer;
-import vehicle.service.entity.Service;
+import vehicle.service.entity.Repair;
 import vehicle.service.entity.Vehicle;
 
 
@@ -19,7 +19,7 @@ public class CustomerData {
 		private String customerLastName;
 		private String customerEmail;
 		private Set<VehicleData> vehicles = new HashSet<>();
-		private Set<ServiceData> services = new HashSet<>();
+		private Set<RepairData> repairs = new HashSet<>();
 	
 		
 		public CustomerData (Customer customer) {
@@ -31,8 +31,8 @@ public class CustomerData {
 			for(Vehicle vehicle : customer.getVehicles() ) {
 				vehicles.add(new VehicleData(vehicle));
 			}
-			for (Service service : customer.getServices() ) {
-				services.add( new ServiceData(service));
+			for (Repair repair : customer.getRepairs() ) {
+				repairs.add( new RepairData(repair));
 			}
 		}
 		

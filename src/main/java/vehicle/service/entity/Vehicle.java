@@ -38,11 +38,11 @@ public class Vehicle {
 	
 	
 	@ManyToMany(cascade = CascadeType.PERSIST)
-	@JoinTable(name = "vehicle_service", joinColumns = @JoinColumn(name = "vehicle_id"),
-	inverseJoinColumns = @JoinColumn(name = "service_id"))
+	@JoinTable(name = "vehicle_repair", joinColumns = @JoinColumn(name = "vehicle_id"),
+	inverseJoinColumns = @JoinColumn(name = "repair_id"))
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
-	private Set<Service> services = new HashSet<>();
+	private Set<Repair> repairs = new HashSet<>();
 	
 	
 	@EqualsAndHashCode.Exclude

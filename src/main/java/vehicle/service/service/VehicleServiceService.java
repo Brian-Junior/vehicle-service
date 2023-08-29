@@ -10,12 +10,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import vehicle.service.controller.model.CustomerData;
-import vehicle.service.controller.model.ServiceData;
+import vehicle.service.controller.model.RepairData;
 import vehicle.service.controller.model.VehicleData;
 import vehicle.service.dao.CustomerDao;
-import vehicle.service.dao.ServiceDao;
+import vehicle.service.dao.RepairDao;
 import vehicle.service.dao.VehicleDao;
 import vehicle.service.entity.Customer;
+import vehicle.service.entity.Repair;
 import vehicle.service.entity.Vehicle;
 
 @Service
@@ -25,7 +26,7 @@ public class VehicleServiceService {
 	private CustomerDao customerDao;
 	
 	@Autowired
-	private ServiceDao serviceDao;
+	private RepairDao repairDao;
 	
 	@Autowired
 	private VehicleDao vehicleDao;
@@ -71,7 +72,7 @@ public VehicleData saveVehicle(Long customerId, VehicleData vehicleData) {
 
  Customer customer = findCustomerById(customerId);
  Long vehicleId = vehicleData.getVehicleId();
- Vehicle vehicle = findOrCreateVehicle(customerId, vehicleId);
+ Vehicle vehicle = findOrCreateVehicle( vehicleId);
  
  copyVehicleFields(vehicle, vehicleData);
  vehicle.setCustomer(customer);
@@ -91,23 +92,19 @@ private void copyVehicleFields(Vehicle vehicle, VehicleData vehicleData) {
 
 }
 
-private Vehicle findOrCreateVehicle(Long customerId, Long vehicleId) {
+private Vehicle findOrCreateVehicle( Long vehicleId) {
 if (Objects.isNull(vehicleId)){
 	return new Vehicle();
 } else {
-	return findVehicleById(customerId,vehicleId);
+	return findVehicleById(vehicleId);
 }
 }
 
 
-private Vehicle findVehicleById(Long customerId, Long vehicleId) {
-	Vehicle vehicle = vehicleDao.findById(vehicleId).orElseThrow(() -> 
- new NoSuchElementException("No Vehicle found"));
-if (vehicle.getCustomer().getCustomerId()!= customerId) {
-	throw new IllegalArgumentException("Vehicle with id" + vehicleId + " does not exist");
-}
-return vehicle;
+private Vehicle findVehicleById(Long vehicleId) {
 
+	return vehicleDao.findById(vehicleId)
+			.orElseThrow(() -> new NoSuchElementException("Vehicle with ID =" + vehicleId + " was not found"));
 }
 @Transactional(readOnly = true)
 public List<CustomerData> retrieveAllCustomers(){
@@ -116,7 +113,7 @@ public List<CustomerData> retrieveAllCustomers(){
 	for (Customer customer : customers) {
 		CustomerData psd = new CustomerData(customer);
 				
-				psd.getServices().clear();
+				psd.getRepairs().clear();
 				psd.getVehicles().clear();
 				
 				result.add(psd);	
@@ -127,56 +124,61 @@ public List<CustomerData> retrieveAllCustomers(){
 }
 
 @Transactional(readOnly = false)
-public ServiceData saveService(Long vehicleId, ServiceData serviceData) {
+public RepairData saveRepair(Long vehicleId, RepairData repairData) {
 
 
-	 Customer customer = findCustomerById(customerId);
-	 Long serviceId = serviceData.getServiceId();
-	 Service service = findOrCreateService(vehicleId, serviceId);
+	 Vehicle vehicle = findVehicleById(vehicleId);
+	 Long repairId = repairData.getRepairId();
+	 Repair repair = findOrCreateRepair(vehicleId, repairId);
 	 
-	 copyServiceFields(service, serviceData);
-	 service.getvehicles().add(vehicle);
-	customer.getServices().add(service);
-	 return new ServiceData(serviceDao.save(service));
+	 copyRepairFields(repair, repairData);
+	 repair.getVehicles().add(vehicle);
+	vehicle.getRepairs().add(repair);
+	 return new RepairData(repairDao.save(repair));
 	  	
 }
 
-private void copyServiceFields(Service service, ServiceData serviceData) {
-	service.setServiceId(serviceData.getServiceId());
-	service.setServiceType(serviceData.getServiceType());
-	service.setServiceCost(serviceData.getServiceCost());
+private void copyRepairFields(Repair repair, RepairData repairData) {
+	repair.setRepairId(repairData.getRepairId());
+	repair.setRepairType(repairData.getRepairType());
+	repair.setRepairCost(repairData.getRepairCost());
 	
 }
-private Customer findOrCreateService(Long customerId, Long serviceId) {
-	if (Objects.isNull(serviceId)){
-		return new Service();
+private Repair findOrCreateRepair(Long vehicleId, Long repairId) {
+	if (Objects.isNull(repairId)){
+		return new Repair();
 	} else {
-		return findServiceById(customerId, serviceId);
+		return findRepairById(vehicleId, repairId);
 	}
 }
 	
 
-private Service findServiceById(Long customerId, Long serviceId) {
-	Service service = serviceDao.findById(serviceId).orElseThrow(() -> 
-	 new NoSuchElementException("No services found"));
+private Repair findRepairById(Long vehicleId, Long repairId) {
+	Repair repair = repairDao.findById(repairId).orElseThrow(() -> 
+	 new NoSuchElementException("No repairs found"));
 	boolean flag = false;
-	for (Customer customer : service.getCustomers()) {
-	if (customer.getCustomerId()== customerId) {
+	for (Vehicle vehicle : repair.getVehicles()) {
+	if (vehicle.getVehicleId()== vehicleId) {
 		flag = true;
 		break;
 	}
 	}
 	if (!flag) {
 	
-		throw new IllegalArgumentException("Service with id" + serviceId + " is not avalible ");
+		throw new IllegalArgumentException("Repair with id" + repairId + " is not avalible ");
 	}
-	return service;
+	return repair;
 	}
 
 @Transactional(readOnly = true)
 public CustomerData retrieveCustomerById(Long customerId) {
 	Customer customer = findCustomerById(customerId);
 	return new CustomerData(customer);
+}
+@Transactional(readOnly = true)
+public VehicleData retrieveVehicleById(Long vehicleId) {
+	Vehicle vehicle = findVehicleById(vehicleId);
+	return new VehicleData(vehicle);
 }
 
 
@@ -186,5 +188,12 @@ public void deleteCustomerById(Long customerId) {
 	customerDao.delete(customer);
 	
 	
-}	
+}
+@Transactional(readOnly = false)
+public void deleteVehicleById(Long vehicleId) {
+	Vehicle vehicle = findVehicleById(vehicleId);
+	vehicleDao.delete(vehicle);
+	
+	
+}
 }
