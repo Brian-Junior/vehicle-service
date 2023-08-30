@@ -31,6 +31,6 @@ public class Repair {
 	
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
-	@ManyToMany(mappedBy = "services")
+	@ManyToMany(mappedBy = "repairs")
 		private Set<Vehicle> vehicles = new HashSet<>();
 }
