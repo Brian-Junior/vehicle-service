@@ -6,7 +6,6 @@ import java.util.Set;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import vehicle.service.entity.Customer;
-import vehicle.service.entity.Repair;
 import vehicle.service.entity.Vehicle;
 
 
@@ -31,9 +30,7 @@ public class CustomerData {
 			for(Vehicle vehicle : customer.getVehicles() ) {
 				vehicles.add(new VehicleData(vehicle));
 			}
-			for (Repair repair : customer.getRepairs() ) {
-				repairs.add( new RepairData(repair));
-			}
+			
 		}
 		
 		

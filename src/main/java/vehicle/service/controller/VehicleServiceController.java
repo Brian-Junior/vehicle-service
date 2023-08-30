@@ -35,7 +35,7 @@ public class VehicleServiceController {
 		log.info("Creating customer {}", customerData);
 		return vehicleServiceService.saveCustomer(customerData);
 	}
-	@PutMapping("/{customerId}")
+	@PutMapping("/customer/{customerId}")
 	public CustomerData updateCustomerData(@PathVariable Long customerId, @RequestBody CustomerData customerData) {
 		customerData.setCustomerId(customerId);
 		log.info("Updating customer{}", customerData);

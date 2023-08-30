@@ -40,5 +40,5 @@ public class Customer {
 	
 	private Set<Vehicle> vehicles = new HashSet<>();
 	
-	private Set<Repair> repairs = new HashSet<>();
+	
 }
