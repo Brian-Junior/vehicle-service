@@ -41,7 +41,7 @@ public class VehicleServiceController {
 		log.info("Updating customer{}", customerData);
 		return vehicleServiceService.saveCustomer(customerData);
 	}
-	@PostMapping("/{customerId}/vehicle")
+	@PostMapping("/customer/{customerId}/vehicle")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public VehicleData saveVehicle(@PathVariable Long customerId, @RequestBody VehicleData vehicleData) {
 		log.info("Creating Vehicle {}", vehicleData);
@@ -53,36 +53,36 @@ public class VehicleServiceController {
 		return vehicleServiceService.retrieveAllCustomers();
 	}
 	
-	@PostMapping("/{vehicleId}/repair")
+	@PostMapping("/vehicle/{vehicleId}/repair")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public RepairData saveRepair(@PathVariable Long vehicleId, @RequestBody RepairData repairData) {
 		log.info("Creating repair {}", repairData);
 		return vehicleServiceService.saveRepair(vehicleId, repairData);
 	}
-	@GetMapping("/{customerId}")
+	@GetMapping("/customer/{customerId}")
 	public CustomerData retrieveCustomerById(@PathVariable Long customerId) {
 		log.info("Retriving customer with ID={}", customerId);
 		return vehicleServiceService.retrieveCustomerById(customerId);
 	}
-	@DeleteMapping("/{customerId}")
+	@DeleteMapping("/customer/{customerId}")
 	public Map<String, String> deleteCustomerById(@PathVariable Long customerId ){
 		log.info("Deleting customer with id=" + customerId + ".");
 		vehicleServiceService.deleteCustomerById(customerId);
 		
 		return Map.of("message", "Customer with ID=" + customerId + "was deleted successfully");
 	}
-	@PutMapping("/{vehicleId}")
+	@PutMapping("/vehicle/{vehicleId}")
 	public VehicleData updatevehicleData(@PathVariable Long vehicleId, @RequestBody VehicleData vehicleData) {
 		vehicleData.setVehicleId(vehicleId);
 		log.info("Updating vehicle{}", vehicleData);
 		return vehicleServiceService.saveVehicle(vehicleId, vehicleData);
 	}
-	@GetMapping("/{vehicleId}")
+	@GetMapping("/vehicle/{vehicleId}")
 	public VehicleData retrieveVehicleById(@PathVariable Long vehicleId) {
 		log.info("Retriving vehicle with ID={}", vehicleId);
 		return vehicleServiceService.retrieveVehicleById(vehicleId);
 	}
-	@DeleteMapping("/{vehicleId}")
+	@DeleteMapping("/vehicle/{vehicleId}")
 	public Map<String, String> deleteVehicleById(@PathVariable Long vehicleId ){
 		log.info("Deleting vehicle with id=" + vehicleId + ".");
 		vehicleServiceService.deleteVehicleById(vehicleId);
