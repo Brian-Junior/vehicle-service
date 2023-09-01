@@ -18,7 +18,7 @@ public class CustomerData {
 		private String customerLastName;
 		private String customerEmail;
 		private Set<VehicleData> vehicles = new HashSet<>();
-		private Set<RepairData> repairs = new HashSet<>();
+		//private Set<RepairData> repairs = new HashSet<>();
 	
 		
 		public CustomerData (Customer customer) {

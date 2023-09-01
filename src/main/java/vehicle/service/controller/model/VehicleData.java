@@ -1,5 +1,8 @@
 package vehicle.service.controller.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import vehicle.service.entity.Vehicle;
@@ -14,6 +17,7 @@ public class VehicleData {
 	private String vehicleModel;
 	private String vehicleColor;
 	
+	private Set<RepairData> repairs = new HashSet<>(); 
 	
 	public VehicleData (Vehicle vehicle) {
 		vehicleId = vehicle.getVehicleId();

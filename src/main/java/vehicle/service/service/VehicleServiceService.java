@@ -31,7 +31,7 @@ public class VehicleServiceService {
 	@Autowired
 	private VehicleDao vehicleDao;
 
-	
+//SAVE CUSTOMER DATA	
 	@Transactional(readOnly = false)
 	public CustomerData saveCustomer(CustomerData vehicleServiceCustomerData) {
 		Long customerId = vehicleServiceCustomerData.getCustomerId();
@@ -46,9 +46,7 @@ public class VehicleServiceService {
 		customer.setCustomerLastName(vehicleServiceCustomerData.getCustomerLastName());
 		customer.setCustomerEmail(vehicleServiceCustomerData.getCustomerEmail());
 		
-	}
-	
-	
+	}	
 private Customer findOrCreateCustomer(Long customerId) {
 		
 		if (Objects.isNull(customerId)) {
@@ -56,7 +54,6 @@ private Customer findOrCreateCustomer(Long customerId) {
 		} else {
 			return findCustomerById(customerId);
 		}
-		
 	}
 
 private Customer findCustomerById(Long customerId) {
@@ -65,14 +62,14 @@ private Customer findCustomerById(Long customerId) {
 			.orElseThrow(() -> new NoSuchElementException("Customer with ID =" + customerId + " was not found"));
 
 	}
-
+//SAVE VEHICLE DATA
 @Transactional(readOnly = false)
 public VehicleData saveVehicle(Long customerId, VehicleData vehicleData) {
 
 
  Customer customer = findCustomerById(customerId);
  Long vehicleId = vehicleData.getVehicleId();
- Vehicle vehicle = findOrCreateVehicle( vehicleId);
+ Vehicle vehicle = findOrCreateVehicle( customerId,vehicleId);
  
  copyVehicleFields(vehicle, vehicleData);
  vehicle.setCustomer(customer);
@@ -81,7 +78,6 @@ public VehicleData saveVehicle(Long customerId, VehicleData vehicleData) {
   
 
 }
-
 private void copyVehicleFields(Vehicle vehicle, VehicleData vehicleData) {
 	vehicle.setVehicleId(vehicleData.getVehicleId());
 	vehicle.setVehicleYear(vehicleData.getVehicleYear());
@@ -91,21 +87,29 @@ private void copyVehicleFields(Vehicle vehicle, VehicleData vehicleData) {
 
 
 }
-
-private Vehicle findOrCreateVehicle( Long vehicleId) {
+//FIND OR CREATE VEHICLE
+private Vehicle findOrCreateVehicle( Long customerId,Long vehicleId) {
 if (Objects.isNull(vehicleId)){
 	return new Vehicle();
 } else {
-	return findVehicleById(vehicleId);
+	return findVehicleById(customerId,vehicleId);
 }
 }
 
+//FIND VEHICLE BY ID
+private Vehicle findVehicleById(Long customerId, Long vehicleId) {
 
-private Vehicle findVehicleById(Long vehicleId) {
-
-	return vehicleDao.findById(vehicleId)
+	Vehicle vehicle = vehicleDao.findById(vehicleId)
 			.orElseThrow(() -> new NoSuchElementException("Vehicle with ID =" + vehicleId + " was not found"));
+
+if (vehicle.getCustomer().getCustomerId()!= customerId) {
+	throw new IllegalArgumentException("vehicle "  + vehicleId + " does not belong to customer" + customerId);
 }
+return vehicle;
+
+
+}
+//RETREVE ALL CUSTOMERS
 @Transactional(readOnly = true)
 public List<CustomerData> retrieveAllCustomers(){
 	List<Customer> customers = customerDao.findAll();
@@ -113,7 +117,7 @@ public List<CustomerData> retrieveAllCustomers(){
 	for (Customer customer : customers) {
 		CustomerData psd = new CustomerData(customer);
 				
-				psd.getRepairs().clear();
+				//psd.getRepairs().clear();
 				psd.getVehicles().clear();
 				
 				result.add(psd);	
@@ -122,12 +126,12 @@ public List<CustomerData> retrieveAllCustomers(){
 	return result;
 	
 }
-
+// SAVE REPAIR DATA
 @Transactional(readOnly = false)
-public RepairData saveRepair(Long vehicleId, RepairData repairData) {
+public RepairData saveRepair(Long customerId, Long vehicleId, RepairData repairData) {
 
 
-	 Vehicle vehicle = findVehicleById(vehicleId);
+	 Vehicle vehicle = findVehicleById( customerId,vehicleId);
 	 Long repairId = repairData.getRepairId();
 	 Repair repair = findOrCreateRepair(vehicleId, repairId);
 	 
@@ -144,6 +148,7 @@ private void copyRepairFields(Repair repair, RepairData repairData) {
 	repair.setRepairCost(repairData.getRepairCost());
 	
 }
+//FIND OR CREATE REPAIR
 private Repair findOrCreateRepair(Long vehicleId, Long repairId) {
 	if (Objects.isNull(repairId)){
 		return new Repair();
@@ -152,7 +157,7 @@ private Repair findOrCreateRepair(Long vehicleId, Long repairId) {
 	}
 }
 	
-
+//FIND REPAIR BY ID
 private Repair findRepairById(Long vehicleId, Long repairId) {
 	Repair repair = repairDao.findById(repairId).orElseThrow(() -> 
 	 new NoSuchElementException("No repairs found"));
@@ -169,29 +174,28 @@ private Repair findRepairById(Long vehicleId, Long repairId) {
 	}
 	return repair;
 	}
-
+// GET CUSTOMER BY ID
 @Transactional(readOnly = true)
 public CustomerData retrieveCustomerById(Long customerId) {
 	Customer customer = findCustomerById(customerId);
 	return new CustomerData(customer);
 }
+// GET VEHICLE BY ID
 @Transactional(readOnly = true)
-public VehicleData retrieveVehicleById(Long vehicleId) {
-	Vehicle vehicle = findVehicleById(vehicleId);
+public VehicleData retrieveVehicleById(Long customerId, Long vehicleId) {
+	Vehicle vehicle = findVehicleById(customerId, vehicleId);
 	return new VehicleData(vehicle);
 }
-
-
+//DELETE CUSTOMER BY ID
 @Transactional(readOnly = false)
 public void deleteCustomerById(Long customerId) {
 	Customer customer = findCustomerById(customerId);
 	customerDao.delete(customer);
-	
-	
 }
+// DELETE VEHICLE BY ID
 @Transactional(readOnly = false)
-public void deleteVehicleById(Long vehicleId) {
-	Vehicle vehicle = findVehicleById(vehicleId);
+public void deleteVehicleById(Long customerId, Long vehicleId) {
+	Vehicle vehicle = findVehicleById(customerId, vehicleId);
 	vehicleDao.delete(vehicle);
 	
 	

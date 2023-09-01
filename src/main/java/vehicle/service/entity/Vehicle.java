@@ -24,16 +24,15 @@ public class Vehicle {
 	private Long vehicleId;
 	
 	@EqualsAndHashCode.Exclude
-	
 	private String vehicleYear;
-	@EqualsAndHashCode.Exclude
 	
+	@EqualsAndHashCode.Exclude
 	private String vehicleMake;
-	@EqualsAndHashCode.Exclude
 	
+	@EqualsAndHashCode.Exclude
 	private String vehicleModel;
-	@EqualsAndHashCode.Exclude
 	
+	@EqualsAndHashCode.Exclude
 	private String vehicleColor;
 	
 	
